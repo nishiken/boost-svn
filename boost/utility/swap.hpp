@@ -30,7 +30,7 @@ namespace boost_swap_impl
   void swap_impl(T& left, T& right)
   {
     using namespace std;//use std::swap if argument dependent lookup fails
-    swap(left,right);
+    swap(left,right); // boost名前空間の外に出してboostのswapが再帰呼び出しされないようになっている。
   }
 
   template<class T, std::size_t N>
@@ -38,6 +38,7 @@ namespace boost_swap_impl
   {
     for (std::size_t i = 0; i < N; ++i)
     {
+      // std::swapと違って配列にも対応
       ::boost_swap_impl::swap_impl(left[i], right[i]);
     }
   }
@@ -48,6 +49,8 @@ namespace boost
   template<class T1, class T2>
   void swap(T1& left, T2& right)
   {
+    // T1, T2を指定している。
+    // どうもここの具体的な事情がよく分からん。
     ::boost_swap_impl::swap_impl(left, right);
   }
 }
